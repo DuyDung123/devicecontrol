@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ></title>
+    <link href="../static/template/admin/assets/css/bootstrap.min.css" th:href="@{/template/admin/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <link href="../static/template/admin/font-awesome/4.5.0/css/font-awesome.min.css" th:href="@{/template/admin/font-awesome/4.5.0/css/font-awesome.min.css}" rel="stylesheet" />
+    <link href="../static/template/admin/assets/css/ace.min.css" th:href="@{/template/admin/assets/css/ace.min.css}" rel="stylesheet" />
+    <script href="../static/template/admin/assets/js/ace-extra.min.js" th:src="@{/template/admin/assets/js/ace-extra.min.js}" type="text/javascript"></script>
+    <link th:href="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css}" rel="stylesheet" />
+    <link th:href="@{https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css}" rel="stylesheet"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}" type="text/javascript"></script>
+    <script href="../static/template/admin/js/jquery-2.2.3.min.js" th:src="@{/template/admin/js/jquery-2.2.3.min.js}" type="text/javascript"></script>
+    <script href="../static/template/admin/assets/js/jquery.2.1.1.min.js" th:src="@{/template/admin/assets/js/jquery.2.1.1.min.js}" type="text/javascript"></script>
+    <link th:href="@{https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css}" rel="stylesheet"/>
+    <script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.js}" type="text/javascript"></script>
+    <script href="../static/template/paging/jquery.twbsPagination.js" th:src="@{/template/paging/jquery.twbsPagination.js}" type="text/javascript"></script>
+
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js}" type="text/javascript"></script>
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js" type="text/javascript"></script>
+    <link href="../static/template/admin/css/stylehome.css" th:href="@{/template/admin/css/stylehome.css}" rel="stylesheet" />
+</head>
+<body class="no-skin">
+<!-- header -->
+<div th:replace="common/header :: header"></div>
+<!-- header -->
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+    </script>
+    <!-- menu -->
+    <div th:replace="common/menu :: menu"></div>
+    <!-- menu -->
+    <div th:replace="${view} :: content">Content goes here!</div>
+
+    <!-- footer -->
+    <div th:replace="common/footer :: footer"></div>
+    <!-- footer -->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+</div>
+
+
+<script th:src="@{/template/admin/assets/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/jquery-ui.custom.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/jquery.ui.touch-punch.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/jquery.easypiechart.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/jquery.sparkline.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/jquery.flot.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/jquery.flot.pie.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/jquery.flot.resize.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/ace-elements.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/ace.min.js}" type="text/javascript"></script>
+<script th:src="@{/template/admin/assets/js/bootstrap.min.js}" type="text/javascript"></script>
+
+<!-- page specific plugin scripts -->
+<script th:src="@{/template/admin/assets/js/jquery-ui.min.js}" type="text/javascript"></script>
+</body>
+</html>
+
