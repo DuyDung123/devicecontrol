@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="decorators/admin" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Device</title>
+</head>
+<body>
+    <div class="main-content" th:fragment="content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href='/'>home</a>
+                    </li>
+                    <li class="active">list device</li>
+                </ul>
+                <!-- /.breadcrumb -->
+            </div>
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="widget-box table-filter">
+                            <div class="table-btn-controls">
+                                <div class="pull-right tableTools-container">
+                                    <div class="dt-buttons btn-overlap btn-group">
+                                        <button class="dt-button buttons-colvis btn btn-white btn-primary btn-bold" th:id="addDevice" th:data-idDevice="add" data-toggle="modal" data-target="#addMenu" title='Thêm menu'>
+                                            <span>
+												<i class="fa fa-plus-circle bigger-110 purple"></i>
+											</span>
+                                        </button>
+                                        <button id="btnDelete" type="button" class="dt-button buttons-html5 btn btn-white btn-primary btn-bold" data-toggle="tooltip" title='Xóa thiết bị'>
+											<span>
+												<i class="fa fa-trash-o bigger-110 pink"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="checkAll"></th>
+                                            <th>Tên thiết bị</th>
+                                            <th>code</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <th:block th:each="item : ${device}">
+                                            <tr>
+                                                <td><input type="checkbox" th:id="'checkbox_'+${item.id}" th:value="${item.id}"></td>
+                                                <td th:utext="${item.name}"></td>
+                                                <td th:utext="${item.devicecode}"></td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-primary btn-edit updateDevice" data-toggle="tooltip" th:data-idDevice="${item.id}" th:onclick="|openModalUpdate(${item.id})|"
+                                                       title="Cập nhật thiết bị"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </th:block>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="title-modal">ADD</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label>Loạt thiết bị:</label>
+                        <select th:id="category" th:name="category" class="categoryCss form-control">
+                            <option th:value="0">Chọn loại thiết bị</option>
+                            <th:block th:each="item : ${category}">
+                                <option th:value="${item.id}" th:utext="${item.name}"></option>
+                            </th:block>
+                        </select>
+                        <div class="deviceCss"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary btnAddAndUpdate" th:onclick="|addAndUpdateDevice()|">Add Device</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+        <script>
+            $(document).ready(function () {
+
+                var btnUpdateDevice = document.getElementsByClassName("updateDevice");
+
+                $('#addDevice').on('click', function (e) {
+                    let formAddAndUpdateDevice = `<div class="form-group">
+                                                        <label for="usr">Name:</label>
+                                                        <input type="text" class="form-control" id="name" name="name">
+                                                        <input type="hidden" class="form-control" id="id" name="id">
+                                                  </div>`
+
+                    $('#addDeviceModal').find('.title-modal').html('ADD');
+                    $('#addDeviceModal').modal('toggle').find('.modal-body .deviceCss').html(formAddAndUpdateDevice);
+                    $('#addDeviceModal').find('.modal-footer .btnAddAndUpdate').html('Add Device');
+                });
+
+            });
+
+            function openModalUpdate(id){
+                console.log(id)
+                let url = window.location.protocol + "//" + window.location.host + '/device/'+id;
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: "json",
+                    success: function (response) {
+                        let formAddAndUpdateDevice = `<div class="form-group">
+                                                        <label>Name:</label>
+                                                        <input type="text" class="form-control" id="name" name="name">
+                                                        <input type="hidden" class="form-control" id="id" name="id">
+                                                  </div>`
+
+                        $('#addDeviceModal').find('.title-modal').html('UPDATE');
+                        $('#addDeviceModal').modal('toggle').find('.modal-body .deviceCss').html(formAddAndUpdateDevice);
+                        $('#addDeviceModal').find('.modal-footer .btnAddAndUpdate').html('Update Device');
+                        $('#id').val(response.data.id);
+                        $('#name').val(response.data.name);
+                        $('#category').val(response.data.category);
+                    },
+                    error: function (error) {
+                        alert("error server"+ error);
+                    }
+                });
+            }
+
+            function addAndUpdateDevice() {
+                var data = {};
+                data.id = $('#id').val();
+                data.name = $('#name').val();
+                data.category = $('#category').val();
+                let url = "";
+                if (data.category !== 0){
+                    if(data.id === ""){
+                        addDevice(data);
+                    }else {
+                        updateNew(data, url);
+                    }
+                }else
+                {
+                    alert("bạn chưa chọn loại thiết bị");
+                }
+            }
+
+            function addDevice(data) {
+                let url = window.location.protocol + "//" + window.location.host + '/device/';
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log(result);
+                        alert("thêm thành công");
+                        window.location.href = window.location.protocol + "//" + window.location.host +'/device/list';
+                    },
+                    error: function (error) {
+                        alert("thêm thất bai");
+                        //window.location.href = window.location.protocol + "//" + window.location.host +'/device/list';
+                        console.log(error);
+                    }
+                });
+            }
+
+            function updateNew(data) {
+                let url = window.location.protocol + "//" + window.location.host + '/device/'+data.id;
+                $.ajax({
+                    url: url,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log(result);
+                        alert("sửa thành công");
+                        window.location.href = window.location.protocol + "//" + window.location.host +'/device/list';
+                        console.log(result);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert("sửa thất bai");
+                        //window.location.href = window.location.protocol + "//" + window.location.host +'/device/list';
+                    }
+                });
+            }
+        </script>
+</div>
+</body>
+</html>

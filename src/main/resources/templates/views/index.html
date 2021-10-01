@@ -2,7 +2,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="decorators/admin" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>home</title>
 </head>
 <body>
 <div class="main-content" th:fragment="content">
@@ -50,15 +50,15 @@
                                                     </div>
                                                     <div class="layer2">
                                                         <th:block th:if = "${item.category == 1}">
-                                                            <img th:id="'icondeviceon'+${item.id}" th:src="@{../common/images/lightOff.jpg}" class="lightoff" th:classappend="${item.status == 0} ? active :disable">
+                                                            <img th:id="'icondeviceoff'+${item.id}" th:src="@{../common/images/lightOff.jpg}" class="lightoff" th:classappend="${item.status == 0} ? active :disable">
                                                         </th:block>
                                                         <th:block th:if = "${item.category == 2}">
-                                                            <img th:id="'icondeviceon'+${item.id}" th:src="@{../common/images/fanOff.png}" class="fanoff" th:classappend="${item.status == 0} ?  active:disable">
+                                                            <img th:id="'icondeviceoff'+${item.id}" th:src="@{../common/images/fanOff.png}" class="fanoff" th:classappend="${item.status == 0} ?  active:disable">
                                                         </th:block>
                                                     </div>
                                                 </div>
                                                 <div class="buttononoff">
-                                                    <input type="checkbox" class="btnOnOffDevide" th:data-iddevide ="${item.id}" data-toggle="toggle" data-onstyle="danger"
+                                                    <input type="checkbox" class="btnOnOffDevide" th:data-codeDevice="${item.devicecode}" th:data-iddevide ="${item.id}" data-toggle="toggle" data-onstyle="danger"
                                                            data-offstyle="dark" data-style="ios" data-size="sm" th:checked="${item.status}" >
                                                 </div>
                                             </div>
@@ -72,6 +72,147 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            let host = window.location.protocol + "//" + window.location.host + '/device?category=3';
+            let listDevice = [];
+            $.ajax({
+                type: "GET",
+                url: host,
+                data:{},
+                dataType: "json",
+                success: function (response) {
+                    listDevice = response.data;
+                    customDataChart(listDevice);
+                    console.log(listDevice);
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("error server");
+                }
+            });
+            autoGetAndUpdateChart(host);
+
+            var nut = document.getElementsByClassName("btnOnOffDevide");
+            var data ={};
+            for (let i = 0; i < nut.length; i++) {
+                nut[i].onchange = function () {
+                    data.id = $(this).attr("data-iddevide");
+                    data.devicecode = $(this).attr("data-codeDevice");
+                    if ($(this).prop('checked') === true) {
+                        data.status = 1;
+                        $('#icondeviceon' + data.id).addClass('active').removeClass('disable');
+                        $('#icondeviceoff' + data.id).removeClass('active').addClass('disable');
+                    } else {
+                        data.status = 0;
+                        $('#icondeviceon' + data.id).removeClass('active').addClass('disable');
+                        $('#icondeviceoff' + data.id).addClass('active').removeClass('disable');
+                    }
+                    updateStatusDevice(data);
+                };
+            }
+        });
+        function autoGetAndUpdateChart(host){
+            var thoigian = setInterval(function(){
+                let listDevice = [];
+                $.ajax({
+                    type: "GET",
+                    url: host,
+                    data:{},
+                    success: function (response) {
+                        listDevice = response.data;
+                        customDataChart(listDevice);
+                        console.log(listDevice);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert("error server");
+                    }
+                });
+            }, 5000)
+        }
+        function updateStatusDevice(data){
+            console.log(data);
+            let url = window.location.protocol + "//" + window.location.host + '/device/'+data.devicecode+'/'+data.status;
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(data),
+                dataType: "json",
+                success: function (response) {
+                    if(response.data.status == 1){
+                        alert(response.data.name + " đã bật");
+                    }else{
+                        alert(response.data.name + " đã tắt");
+                    }
+                },
+                error: function (error) {
+
+                    alert("error server"+ error);
+                }
+            });
+        }
+        function customDataChart(data) {
+            for (let i = 0; i < data.length; i++) {
+                let time = [], temp = [], hum = [];
+                let name, id;
+                const listStatus = data[i].listStatus;
+                id = data[i].id;
+                name = data[i].name;
+                for (let j = listStatus.length-1; j >= 0; j--) {
+                    const date = timeConverter(listStatus[j].createdDate);
+                    const t = listStatus[j].temperature;
+                    const h = listStatus[j].humidity;
+                    time.push(date);
+                    temp.push(t);
+                    hum.push(h);
+                }
+                console.log(time);
+                console.log(temp);
+                console.log(hum);
+                console.log(listStatus);
+                chartTemAndHum(time, temp, hum, name, id);
+            }
+        }
+        function timeConverter(UNIX_timestamp) {
+            var date = new Date(UNIX_timestamp);
+            //  date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " " +
+            var time = date.getHours() + ":" + date.getMinutes();
+            return time;
+        }
+        function chartTemAndHum(date,temp,hum,name,id) {
+            var xValues = date;
+            new Chart("myChart"+id, {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [
+                        {
+                            data: temp,
+                            borderColor: "red",
+                            label: "temp",
+                            fill: true
+                        },
+                        {
+                            data: hum,
+                            borderColor: "blue",
+                            label: "hum",
+                            fill: true
+                        }]
+                },
+                options: {
+                    legend: {
+                        display: true
+                    },
+                    title: {
+                        display: true,
+                        text: name,
+                        fontSize: 16,
+                    }
+                }
+            });
+        }
+    </script>
 </div>
     <!-- /.main-content -->
 </body>

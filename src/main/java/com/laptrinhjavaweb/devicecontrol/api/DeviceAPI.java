@@ -35,11 +35,12 @@ public class DeviceAPI {
 
     @PutMapping("/device/{id}")
     public Response<DeviceDTO> update( @RequestBody DeviceDTO deviceDTO, @PathVariable("id") long id){
+        deviceDTO.setId(id);
         deviceDTO = deviceService.save(deviceDTO);
         return new Response<DeviceDTO>(deviceDTO);
     }
 
-    @PostMapping("/device/{code}/{status}")
+    @PutMapping("/device/{code}/{status}")
     public Response<DeviceDTO> updateStatus(@PathVariable("code") String code, @PathVariable("status") long status){
         DeviceDTO deviceDTO = new DeviceDTO();
         deviceDTO = deviceService.updateStatus(code,status);

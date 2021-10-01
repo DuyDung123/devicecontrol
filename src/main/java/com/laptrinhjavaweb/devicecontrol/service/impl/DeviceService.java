@@ -79,6 +79,7 @@ public class DeviceService implements IDeviceService {
             deviceEntity = deviceConverter.toEntity(deviceDTO,deviceEntity);
         }else {
             deviceEntity = deviceConverter.toEntity(deviceDTO);
+            deviceEntity.setStatus(1l);
         }
         deviceEntity.setCategory(categoryEntity);
         deviceEntity = deviceRepository.save(deviceEntity);
