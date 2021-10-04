@@ -11,9 +11,14 @@ import com.laptrinhjavaweb.devicecontrol.repository.CategoryRepository;
 import com.laptrinhjavaweb.devicecontrol.repository.DeviceRepository;
 import com.laptrinhjavaweb.devicecontrol.repository.StatusRepository;
 import com.laptrinhjavaweb.devicecontrol.service.IDeviceService;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +51,7 @@ public class DeviceService implements IDeviceService {
         List<DeviceDTO> deviceDTOS = new ArrayList<>();
         List<DeviceEntity> deviceEntities;
         if(categoryId != null){
-            CategoryEntity categoryEntity = categoryRepository.findById(categoryId.longValue()).get();
+            CategoryEntity categoryEntity = categoryRepository.findById(categoryId.longValue()).orElse(null);
             deviceEntities = deviceRepository.findByCategory(categoryEntity);
         }else {
             deviceEntities = deviceRepository.findAll();
@@ -72,7 +77,7 @@ public class DeviceService implements IDeviceService {
         DeviceEntity deviceEntity;
         CategoryEntity categoryEntity;
 
-        categoryEntity = categoryRepository.findById(deviceDTO.getCategory()).get();
+        categoryEntity = categoryRepository.findById(deviceDTO.getCategory()).orElse(null);
 
         if (deviceDTO.getId() != null){
             deviceEntity = deviceRepository.getById(deviceDTO.getId());
@@ -84,7 +89,7 @@ public class DeviceService implements IDeviceService {
         deviceEntity.setCategory(categoryEntity);
         deviceEntity = deviceRepository.save(deviceEntity);
 
-        if(deviceEntity.getCategory().getId() == 3){
+        if(deviceDTO.getId() == null && deviceEntity.getCategory().getId() == 3){
             StatusEntity statusEntity = new StatusEntity();
             statusEntity.setDevice(deviceEntity);
             statusEntity.setTemperature(0);

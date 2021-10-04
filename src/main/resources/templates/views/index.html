@@ -24,7 +24,7 @@
                                 <th:block th:each="item : ${device}">
                                     <div th:if="${item.category ==3}">
                                         <div class="mt-3 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <canvas th:id="myChart${item.id}"></canvas>
+                                            <canvas th:id="myChart+${item.id}"></canvas>
                                         </div>
                                     </div>
                                 </th:block>
@@ -83,12 +83,12 @@
                 dataType: "json",
                 success: function (response) {
                     listDevice = response.data;
-                    customDataChart(listDevice);
+                    //customDataChart(listDevice);
                     console.log(listDevice);
                 },
                 error: function (error) {
                     console.log(error);
-                    alert("error server");
+                    //alert("error server");
                 }
             });
             autoGetAndUpdateChart(host);
@@ -122,11 +122,11 @@
                     success: function (response) {
                         listDevice = response.data;
                         customDataChart(listDevice);
-                        console.log(listDevice);
+                        //console.log(listDevice);
                     },
                     error: function (error) {
                         console.log(error);
-                        alert("error server");
+                        //alert("error server");
                     }
                 });
             }, 5000)

@@ -149,14 +149,18 @@
             function addAndUpdateDevice() {
                 var data = {};
                 data.id = $('#id').val();
-                data.name = $('#name').val();
+                data.name = $('#name').val().trim();
                 data.category = $('#category').val();
                 let url = "";
-                if (data.category !== 0){
-                    if(data.id === ""){
-                        addDevice(data);
+                if (data.category !== '0'){
+                    if (data.name.trim() !==''){
+                        if(data.id === ""){
+                            addDevice(data);
+                        }else {
+                            updateNew(data, url);
+                        }
                     }else {
-                        updateNew(data, url);
+                        alert("bạn chưa nhập tên thiết bị");
                     }
                 }else
                 {
@@ -207,6 +211,6 @@
                 });
             }
         </script>
-</div>
+    </div>
 </body>
 </html>

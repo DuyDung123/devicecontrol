@@ -3,6 +3,7 @@ package com.laptrinhjavaweb.devicecontrol.service;
 import com.laptrinhjavaweb.devicecontrol.dto.DeviceDTO;
 import com.laptrinhjavaweb.devicecontrol.dto.StatusDTO;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface IDeviceService {
