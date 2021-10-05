@@ -4,6 +4,7 @@ import com.laptrinhjavaweb.devicecontrol.dto.DeviceDTO;
 import com.laptrinhjavaweb.devicecontrol.dto.StatusDTO;
 import com.laptrinhjavaweb.devicecontrol.entity.DeviceEntity;
 import com.laptrinhjavaweb.devicecontrol.entity.StatusEntity;
+import com.laptrinhjavaweb.devicecontrol.utils.CustomCodeUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,7 @@ public class DeviceConverter {
         deviceEntity.setId(deviceDTO.getId());
         deviceEntity.setName(deviceDTO.getName());
         deviceEntity.setCreatedDate(new Date());
-        deviceEntity.setDevicecode(getCode(deviceDTO.getName()));
+        deviceEntity.setDevicecode(CustomCodeUtils.customCode(deviceDTO.getName()));
         return deviceEntity;
     }
 
@@ -50,17 +51,7 @@ public class DeviceConverter {
         oldDeviceEntity.setId(deviceDTO.getId());
         oldDeviceEntity.setName(deviceDTO.getName());
         oldDeviceEntity.setModifiedDate(new Date());
-        oldDeviceEntity.setDevicecode(getCode(deviceDTO.getName()));
+        oldDeviceEntity.setDevicecode(CustomCodeUtils.customCode(deviceDTO.getName()));
         return oldDeviceEntity;
-    }
-
-
-    private static String getCode(String data){
-        final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        Random random = new Random();
-        int index = random.nextInt(lexicon.length());
-        data += lexicon.charAt(index);
-        byte[] encodedBytes = Base64.encodeBase64(data.getBytes());
-        return new String(encodedBytes) + lexicon.charAt(index);
     }
 }

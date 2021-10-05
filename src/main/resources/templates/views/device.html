@@ -75,7 +75,7 @@
         <!-- Modal -->
         <div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -103,8 +103,6 @@
         <script>
             $(document).ready(function () {
 
-                var btnUpdateDevice = document.getElementsByClassName("updateDevice");
-
                 $('#addDevice').on('click', function (e) {
                     let formAddAndUpdateDevice = `<div class="form-group">
                                                         <label for="usr">Name:</label>
@@ -115,6 +113,32 @@
                     $('#addDeviceModal').find('.title-modal').html('ADD');
                     $('#addDeviceModal').modal('toggle').find('.modal-body .deviceCss').html(formAddAndUpdateDevice);
                     $('#addDeviceModal').find('.modal-footer .btnAddAndUpdate').html('Add Device');
+                    $('#category').val(0);
+                });
+
+                let flag = 1;
+                $("#checkAll").click(function (){
+                    let checkbox = $('tbody input[type=checkbox]');
+                    if (flag === 1){
+                        for(let i=0; i<checkbox.length; i++){
+                            checkbox[i].checked = true;
+                        }
+                        flag = 2;
+                    }else{
+                        for(let i=0; i< checkbox.length; i++){
+                            checkbox[i].checked = false;
+                        }
+                        flag = 1;
+                    }
+                })
+
+                $("#btnDelete").click(function () {
+                    var data = {};
+                    var ids = $('tbody input[type=checkbox]:checked').map(function () {
+                        return $(this).val();
+                    }).get();
+                    data = ids;
+                    deleteDevice(data);
                 });
 
             });
@@ -207,6 +231,21 @@
                         console.log(error);
                         alert("sửa thất bai");
                         //window.location.href = window.location.protocol + "//" + window.location.host +'/device/list';
+                    }
+                });
+            }
+
+            function deleteDevice(data) {
+                $.ajax({
+                    url: window.location.protocol + "//" + window.location.host+'/device',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        window.location.href = window.location.protocol + "//" + window.location.host +'/device/list';
+                    },
+                    error: function (error) {
+                        window.location.href = window.location.protocol + "//" + window.location.host +'/device/list';
                     }
                 });
             }

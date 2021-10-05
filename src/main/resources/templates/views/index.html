@@ -101,6 +101,7 @@
                     data.devicecode = $(this).attr("data-codeDevice");
                     if ($(this).prop('checked') === true) {
                         data.status = 1;
+
                         $('#icondeviceon' + data.id).addClass('active').removeClass('disable');
                         $('#icondeviceoff' + data.id).removeClass('active').addClass('disable');
                     } else {
@@ -140,14 +141,15 @@
                 data: JSON.stringify(data),
                 dataType: "json",
                 success: function (response) {
-                    if(response.data.status == 1){
-                        alert(response.data.name + " đã bật");
-                    }else{
-                        alert(response.data.name + " đã tắt");
+                    if (response.data.status === 1) {
+                        $('#icondeviceon' + data.id).addClass('active').removeClass('disable');
+                        $('#icondeviceoff' + data.id).removeClass('active').addClass('disable');
+                    } else {
+                        $('#icondeviceon' + data.id).removeClass('active').addClass('disable');
+                        $('#icondeviceoff' + data.id).addClass('active').removeClass('disable');
                     }
                 },
                 error: function (error) {
-
                     alert("error server"+ error);
                 }
             });
