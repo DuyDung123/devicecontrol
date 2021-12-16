@@ -8,6 +8,14 @@ public class CategoryDTO extends AbstractDTO<CategoryDTO>{
     private String name;
     private List<DeviceDTO> devices = new ArrayList<>();
 
+    public CategoryDTO() {
+    }
+
+    public CategoryDTO(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
     public String getCode() {
         return code;
     }
