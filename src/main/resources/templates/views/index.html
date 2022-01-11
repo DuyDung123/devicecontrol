@@ -22,7 +22,7 @@
                         <div class="text-center">
                             <div class="row">
                                 <th:block th:each="item : ${device}">
-                                    <div th:if="${item.category ==3}">
+                                    <div th:if="${item.categoryCode =='nhiet-do-do-am'}">
                                         <div class="mt-3 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                             <canvas th:id="myChart+${item.id}"></canvas>
                                         </div>
@@ -35,24 +35,24 @@
                         <div class="container">
                             <div class="row">
                                 <th:block th:each = "item : ${device}">
-                                    <th:block th:if="${item.category == 1 || item.category == 2}">
+                                    <th:block th:if="${item.categoryCode == 'den' || item.categoryCode == 'quat'}">
                                         <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 col-xl-3">
                                             <div class="device">
                                                 <div class="namedevice" th:utext="${item.name}"></div>
                                                 <div class="khung">
                                                     <div class="layer1">
-                                                        <th:block th:if = "${item.category == 1}">
+                                                        <th:block th:if = "${item.categoryCode == 'den'}">
                                                             <img th:id="'icondeviceon'+${item.id}" th:src="@{../common/images/lightOn.png}" class="lighton" th:classappend="${item.status == 1} ? active :disable">
                                                         </th:block>
-                                                        <th:block th:if = "${item.category == 2}">
+                                                        <th:block th:if = "${item.categoryCode == 'quat'}">
                                                             <img th:id="'icondeviceon'+${item.id}" th:src="@{../common/images/fanOn.png}" class="fanon" th:classappend="${item.status == 1} ? active :disable">
                                                         </th:block>
                                                     </div>
                                                     <div class="layer2">
-                                                        <th:block th:if = "${item.category == 1}">
+                                                        <th:block th:if = "${item.categoryCode == 'den'}">
                                                             <img th:id="'icondeviceoff'+${item.id}" th:src="@{../common/images/lightOff.jpg}" class="lightoff" th:classappend="${item.status == 0} ? active :disable">
                                                         </th:block>
-                                                        <th:block th:if = "${item.category == 2}">
+                                                        <th:block th:if = "${item.categoryCode == 'quat'}">
                                                             <img th:id="'icondeviceoff'+${item.id}" th:src="@{../common/images/fanOff.png}" class="fanoff" th:classappend="${item.status == 0} ?  active:disable">
                                                         </th:block>
                                                     </div>
@@ -83,7 +83,7 @@
                 dataType: "json",
                 success: function (response) {
                     listDevice = response.data;
-                    //customDataChart(listDevice);
+                    customDataChart(listDevice);
                     console.log(listDevice);
                 },
                 error: function (error) {

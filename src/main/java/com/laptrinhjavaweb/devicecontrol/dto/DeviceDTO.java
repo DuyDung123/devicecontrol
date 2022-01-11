@@ -8,6 +8,7 @@ public class DeviceDTO extends AbstractDTO<DeviceDTO>{
     private String name;
     private String devicecode;
     private Long category;
+    private String categoryCode;
     private Long status;
     private List<StatusDTO> listStatus = new ArrayList<StatusDTO>();
 
@@ -25,6 +26,14 @@ public class DeviceDTO extends AbstractDTO<DeviceDTO>{
 
     public void setDevicecode(String devicecode) {
         this.devicecode = devicecode;
+    }
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
     }
 
     public Long getCategory() {

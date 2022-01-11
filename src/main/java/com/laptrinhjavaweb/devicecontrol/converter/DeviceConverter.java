@@ -21,6 +21,7 @@ public class DeviceConverter {
         deviceDTO.setName(deviceEntity.getName());
         deviceDTO.setDevicecode(deviceEntity.getDevicecode());
         deviceDTO.setCategory(deviceEntity.getCategory().getId());
+        deviceDTO.setCategoryCode(deviceEntity.getCategory().getCode());
         deviceDTO.setStatus(deviceEntity.getStatus());
         if (!deviceEntity.getStatuss().isEmpty()){
             List<StatusDTO> statusDTOS = new ArrayList<>();
